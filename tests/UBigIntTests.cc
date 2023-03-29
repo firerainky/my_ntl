@@ -8,3 +8,9 @@ TEST(UBigIntTests, EmptyConstructorCreatesZero) {
   ASSERT_EQ(bigInt.toString(), "0");
 }
 
+TEST(UBigIntTests, CreatesBigUnsignedIntegerWithStringRepresentation) {
+  UBigInt bigInt("123");
+  ASSERT_EQ(bigInt.length(), 1);
+  ASSERT_EQ(bigInt.toUInt64(), 123);
+}
+
