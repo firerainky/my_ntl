@@ -1,5 +1,7 @@
 set(TEST_MAIN unittests)
-set(TEST_SOURCES UBigIntTests.cc)
+set(TEST_SOURCES 
+  UBigIntTests.cc
+)
 set(TEST_INCLUDES ./)
 
 add_executable(${TEST_MAIN} ${TEST_SOURCES})
