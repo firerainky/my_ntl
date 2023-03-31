@@ -4,6 +4,14 @@ UBigInt::UBigInt() {
   m_value.push_back(0);
 }
 
+UBigInt::UBigInt(uint64_t val) {
+  m_value.push_back(val);
+}
+
+UBigInt::UBigInt(std::vector<std::uint64_t> vals) {
+  m_value = vals;
+}
+
 UBigInt::UBigInt(std::string strval) {
   // strip off leading zeros from the input string
   strval.erase(0, strval.find_first_not_of('0'));
@@ -54,6 +62,14 @@ UBigInt::UBigInt(std::string strval) {
     if (i != 0) { value <<= 1; }
   }
   if (value > 0) { m_value.push_back(value); }
+}
+
+UBigInt UBigInt::add(UBigInt num) const {
+  uint64_t carry = 0;
+  for (int i = 0; i < m_value.size(); ++i) {
+
+  }
+  return UBigInt(m_value[0] + num.m_value[0]);
 }
 
 std::size_t UBigInt::length() {

@@ -1,6 +1,7 @@
 set(TEST_MAIN unittests)
 set(TEST_SOURCES 
   UBigIntTests.cc
+  AddWithCarryTests.cc
 )
 set(TEST_INCLUDES ./)
 

@@ -42,3 +42,7 @@ TEST(UBigIntTests, CreatesBigUnsignedIntegerWithStringRepresentation) {
   ASSERT_EQ(bigInt.toString(), "123456789012345678901234567890123456789012345678901234567890");
 }
 
+TEST(UBigIntTests, AddTwoUnsignedBigIntegers) {
+  ASSERT_EQ(UBigInt("3").add(UBigInt("4")).toString(), "7");
+}
+
