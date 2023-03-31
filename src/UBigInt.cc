@@ -89,6 +89,25 @@ UBigInt UBigInt::add(UBigInt num) const {
   return UBigInt(resultVectors);
 }
 
+UBigInt UBigInt::sub(UBigInt num) const {
+  std::vector<uint64_t> resultVectors;
+  
+  uint8_t borrow = 0;
+  uint64_t currentLimb;
+
+  for (int i = 0; i < length(); ++i) {
+    if (i >= num.length()) {
+      borrow = subWithBorrow(m_value[i], 0, borrow, &currentLimb);
+      resultVectors.push_back(currentLimb);
+    } else {
+      borrow = subWithBorrow(m_value[i], num.m_value[i], borrow, &currentLimb);
+      resultVectors.push_back(currentLimb);
+    }
+  }
+
+  return UBigInt(resultVectors);
+}
+
 std::size_t UBigInt::length() const {
   return m_value.size();
 }
