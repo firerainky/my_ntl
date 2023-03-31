@@ -10,7 +10,7 @@ class UBigInt {
 
     UBigInt add(UBigInt num) const;
 
-    std::size_t length();
+    std::size_t length() const;
     std::string toString();
     std::uint64_t toUInt64();
   private:

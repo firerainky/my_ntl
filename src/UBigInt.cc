@@ -65,14 +65,31 @@ UBigInt::UBigInt(std::string strval) {
 }
 
 UBigInt UBigInt::add(UBigInt num) const {
-  uint64_t carry = 0;
-  for (int i = 0; i < m_value.size(); ++i) {
-
+  std::vector<uint64_t> resultVectors;
+  
+  uint8_t carry = 0;
+  uint64_t currentLimb;
+  int i = 0;
+  while (i < length() && i < num.length()) {
+    carry = addWithCarry(m_value[i], num.m_value[i], carry, &currentLimb);
+    resultVectors.push_back(currentLimb);
+    ++i;
   }
-  return UBigInt(m_value[0] + num.m_value[0]);
+  while (i < length()) {
+    carry = addWithCarry(m_value[i], 0, carry, &currentLimb);
+    resultVectors.push_back(currentLimb);
+    ++i;
+  }
+  while (i < num.length()) {
+    carry = addWithCarry(0, num.m_value[i], carry, &currentLimb);
+    resultVectors.push_back(currentLimb);
+    ++i;
+  }
+
+  return UBigInt(resultVectors);
 }
 
-std::size_t UBigInt::length() {
+std::size_t UBigInt::length() const {
   return m_value.size();
 }
 
