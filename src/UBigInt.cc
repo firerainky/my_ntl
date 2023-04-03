@@ -108,6 +108,11 @@ UBigInt UBigInt::sub(UBigInt num) const {
   return UBigInt(resultVectors);
 }
 
+UBigInt UBigInt::multiply(UBigInt num) const {
+  
+  return UBigInt();
+}
+
 std::size_t UBigInt::length() const {
   return m_value.size();
 }

@@ -59,3 +59,30 @@ TEST(SubWithBorrowTests, SubWithBorrow)
     ASSERT_FALSE(subWithBorrow(0xF00F00F00F00F00FULL, 0x0FF0FF0FF0FF0FF0ULL, 1, &result));
     ASSERT_EQ(0xE01E01E01E01E01EULL, result);
 }
+
+TEST(UIntArith, MultiplyUInt64Generic)
+{
+    unsigned long long result[2];
+
+    multiplyWithKaratsuba(0ULL, 0ULL, result);
+    ASSERT_EQ(0ULL, result[0]);
+    ASSERT_EQ(0ULL, result[1]);
+    multiplyWithKaratsuba(0ULL, 1ULL, result);
+    ASSERT_EQ(0ULL, result[0]);
+    ASSERT_EQ(0ULL, result[1]);
+    multiplyWithKaratsuba(1ULL, 0ULL, result);
+    ASSERT_EQ(0ULL, result[0]);
+    ASSERT_EQ(0ULL, result[1]);
+    multiplyWithKaratsuba(1ULL, 1ULL, result);
+    ASSERT_EQ(1ULL, result[0]);
+    ASSERT_EQ(0ULL, result[1]);
+    multiplyWithKaratsuba(0x100000000ULL, 0xFAFABABAULL, result);
+    ASSERT_EQ(0xFAFABABA00000000ULL, result[0]);
+    ASSERT_EQ(0ULL, result[1]);
+    multiplyWithKaratsuba(0x1000000000ULL, 0xFAFABABAULL, result);
+    ASSERT_EQ(0xAFABABA000000000ULL, result[0]);
+    ASSERT_EQ(0xFULL, result[1]);
+    multiplyWithKaratsuba(1111222233334444ULL, 5555666677778888ULL, result);
+    ASSERT_EQ(4140785562324247136ULL, result[0]);
+    ASSERT_EQ(334670460471ULL, result[1]);
+}
