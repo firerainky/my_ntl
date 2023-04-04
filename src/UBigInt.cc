@@ -110,7 +110,41 @@ UBigInt UBigInt::sub(UBigInt num) const {
 
 UBigInt UBigInt::multiply(UBigInt num) const {
   
-  return UBigInt();
+  std::vector<uint64_t> value;
+  for (int i = 0; i < length(); ++i) {
+    for (int j = 0; j < num.length(); ++j) {
+      uint64_t temp_result[2];
+      multiplyWithKaratsuba(m_value[i], num.m_value[j], temp_result);
+      uint8_t carry = 0;
+      uint64_t sum;
+      if (i + j + 1 > value.size()) {
+        value.push_back(temp_result[0]);
+      } else {
+        carry = addWithCarry(temp_result[0], value[i+j], carry, &sum);
+        value[i+j] = sum;
+        temp_result[1] += carry;
+        carry = 0;
+      }
+
+      if (i + j + 2 > value.size()) {
+        value.push_back(temp_result[1]);
+      } else {
+        carry = addWithCarry(temp_result[1], value[i+j+1], carry, &sum);
+        value[i+j+1] = sum;
+        uint8_t currentIdx = i+j+2;
+        while (carry) {
+          if (currentIdx > value.size()) {
+            value.push_back(carry);
+          } else {
+            carry = addWithCarry(0, value[currentIdx], carry, &sum);
+            value[currentIdx] = sum;
+          }
+        }
+      }
+    }
+  }
+
+  return UBigInt(value);
 }
 
 std::size_t UBigInt::length() const {

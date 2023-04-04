@@ -60,7 +60,7 @@ TEST(SubWithBorrowTests, SubWithBorrow)
     ASSERT_EQ(0xE01E01E01E01E01EULL, result);
 }
 
-TEST(UIntArith, MultiplyUInt64Generic)
+TEST(MultiplyWithKaratsubaTests, MultiplyWithKaratsuba)
 {
     unsigned long long result[2];
 
