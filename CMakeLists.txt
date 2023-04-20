@@ -9,6 +9,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(LIBRARY_NAME my_fhe)
 
 option(ENABLE_TESTING "Enable a unit testing build" ON)
+option(ENABLE_BENCHMARK "Enable a benchmark build" ON)
 
 include(FetchContent)
 
@@ -18,8 +19,20 @@ FetchContent_Declare(
   GIT_TAG        v1.13.0
 )
 FetchContent_MakeAvailable(googletest)
+
 add_library(GTest::GTest INTERFACE IMPORTED)
 target_link_libraries(GTest::GTest INTERFACE gtest_main)
 
+# Disable the Google Benchmark requirement on Google Test
+set(BENCHMARK_ENABLE_TESTING NO)
+
+FetchContent_Declare(
+    googlebenchmark
+    GIT_REPOSITORY https://github.com/google/benchmark.git
+    GIT_TAG        v1.7.1
+)
+FetchContent_MakeAvailable(googlebenchmark)
+
 add_subdirectory(src)
 add_subdirectory(tests)
+add_subdirectory(benchmark)
