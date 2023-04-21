@@ -1,16 +1,10 @@
 #include "UBigInt.h"
 
-UBigInt::UBigInt() {
-  m_value.push_back(0);
-}
+UBigInt::UBigInt() { m_value.push_back(0); }
 
-UBigInt::UBigInt(uint64_t val) {
-  m_value.push_back(val);
-}
+UBigInt::UBigInt(uint64_t val) { m_value.push_back(val); }
 
-UBigInt::UBigInt(std::vector<std::uint64_t> vals) {
-  m_value = vals;
-}
+UBigInt::UBigInt(std::vector<std::uint64_t> vals) { m_value = vals; }
 
 UBigInt::UBigInt(std::string strval) {
   // strip off leading zeros from the input string
@@ -24,7 +18,7 @@ UBigInt::UBigInt(std::string strval) {
   }
 
   size_t decimalLength = strval.length();
-  uint8_t *decimalArr = new uint8_t[decimalLength](); 
+  uint8_t *decimalArr = new uint8_t[decimalLength]();
   for (int i = 0; i < decimalLength; i++) {
     decimalArr[i] = strval[i] - '0';
   }
@@ -48,7 +42,9 @@ UBigInt::UBigInt(std::string strval) {
       uint64_t value = 0;
       for (int i = bitIndex - 1; i >= 0; --i) {
         value += bitArr[i] * 1;
-        if (i != 0) { value <<= 1; }
+        if (i != 0) {
+          value <<= 1;
+        }
       }
       m_value.push_back(value);
       bitIndex = 0;
@@ -59,14 +55,18 @@ UBigInt::UBigInt(std::string strval) {
   uint64_t value = 0;
   for (int i = bitIndex - 1; i >= 0; --i) {
     value += bitArr[i] * 1;
-    if (i != 0) { value <<= 1; }
+    if (i != 0) {
+      value <<= 1;
+    }
   }
-  if (value > 0) { m_value.push_back(value); }
+  if (value > 0) {
+    m_value.push_back(value);
+  }
 }
 
 UBigInt UBigInt::add(UBigInt num) const {
   std::vector<uint64_t> resultVectors;
-  
+
   uint8_t carry = 0;
   uint64_t currentLimb;
   int i = 0;
@@ -91,7 +91,7 @@ UBigInt UBigInt::add(UBigInt num) const {
 
 UBigInt UBigInt::sub(UBigInt num) const {
   std::vector<uint64_t> resultVectors;
-  
+
   uint8_t borrow = 0;
   uint64_t currentLimb;
 
@@ -109,7 +109,6 @@ UBigInt UBigInt::sub(UBigInt num) const {
 }
 
 UBigInt UBigInt::multiply(UBigInt num) const {
-  
   std::vector<uint64_t> value;
   for (int i = 0; i < length(); ++i) {
     for (int j = 0; j < num.length(); ++j) {
@@ -120,8 +119,8 @@ UBigInt UBigInt::multiply(UBigInt num) const {
       if (i + j + 1 > value.size()) {
         value.push_back(temp_result[0]);
       } else {
-        carry = addWithCarry(temp_result[0], value[i+j], carry, &sum);
-        value[i+j] = sum;
+        carry = addWithCarry(temp_result[0], value[i + j], carry, &sum);
+        value[i + j] = sum;
         temp_result[1] += carry;
         carry = 0;
       }
@@ -129,9 +128,9 @@ UBigInt UBigInt::multiply(UBigInt num) const {
       if (i + j + 2 > value.size()) {
         value.push_back(temp_result[1]);
       } else {
-        carry = addWithCarry(temp_result[1], value[i+j+1], carry, &sum);
-        value[i+j+1] = sum;
-        uint8_t currentIdx = i+j+2;
+        carry = addWithCarry(temp_result[1], value[i + j + 1], carry, &sum);
+        value[i + j + 1] = sum;
+        uint8_t currentIdx = i + j + 2;
         while (carry) {
           if (currentIdx > value.size()) {
             value.push_back(carry);
@@ -147,12 +146,9 @@ UBigInt UBigInt::multiply(UBigInt num) const {
   return UBigInt(value);
 }
 
-std::size_t UBigInt::length() const {
-  return m_value.size();
-}
+std::size_t UBigInt::length() const { return m_value.size(); }
 
 std::string UBigInt::toString() {
-
   std::vector<uint8_t> decimalArr;
   decimalArr.push_back(0);
 
@@ -197,6 +193,4 @@ std::string UBigInt::toString() {
   return printValue;
 }
 
-std::uint64_t UBigInt::toUInt64() {
-  return m_value[0];
-}
+std::uint64_t UBigInt::toUInt64() { return m_value[0]; }
