@@ -1,7 +1,8 @@
 set(TEST_MAIN unittests)
-set(TEST_SOURCES 
+set(TEST_SOURCES
   UBigIntTests.cc
   AddWithCarryTests.cc
+  CeilIntTests.cc
 )
 set(TEST_INCLUDES ./)
 
