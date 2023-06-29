@@ -1,4 +1,4 @@
-set(LIBRARY_SOURCES UBigInt.cc)
+set(LIBRARY_SOURCES UBigInt.cc UBigInt.h)
 set(LIBRARY_INCLUDES "./")
 
 add_library(${LIBRARY_NAME} STATIC ${LIBRARY_SOURCES})

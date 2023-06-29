@@ -35,6 +35,16 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googlebenchmark)
 
+function(SIMPLE REQUIRED_ARG)
+    message(STATUS "Simple arguments: ${REQUIRED_ARG}, followed by ${ARGN}")
+    set(${REQUIRED_ARG} "From SIMPLE" PARENT_SCOPE)
+endfunction()
+
+simple(This Foo Bar)
+message("Output: ${This}")
+message("${CMAKE_CTEST_COMMAND}")
+message("${CMAKE_GENERATOR}")
+
 add_subdirectory(src)
 add_subdirectory(tests)
 add_subdirectory(benchmark)

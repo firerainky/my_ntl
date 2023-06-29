@@ -1,5 +1,23 @@
 #include "UBigInt.h"
 
+
+template<typename T>
+constexpr bool get_value() { return T::value; }
+
+template<typename T>
+    requires (sizeof(T) > 1 && get_value<T>())
+void f(T) {
+    std::cout << "template version" << std::endl;
+}
+
+void f(int32_t) {
+    std::cout << "int version" << std::endl;
+}
+
+void c15() {
+    f('A');
+}
+
 UBigInt::UBigInt()
 {
     m_value.push_back(0);
