@@ -3,6 +3,7 @@ set(TEST_SOURCES
   UBigIntTests.cc
   AddWithCarryTests.cc
   CeilIntTests.cc
+  FftTests.cc
 )
 set(TEST_INCLUDES ./)
 

@@ -1,55 +1,59 @@
-// From: https://zhuanlan.zhihu.com/p/347091298
+// From: ChatGPT
 
-//LuoguP3803
-#include <bits/stdc++.h>
-const int NR = 1 << 22;
-const double eps = 1e-6, pi = acos(-1.0);
-using namespace std;
-complex<double> a[NR], b[NR]; //complex为C++自带虚数
-int n, m;
-void FFT(complex<double> *a, int n, int inv) //inv为虚部符号，inv为1时FFT，inv为-1时IFFT
+#include <complex>
+#include <iostream>
+#include <valarray>
+
+typedef std::complex<double> Complex;
+typedef std::valarray<Complex> ComplexArray;
+
+// 快速傅里叶变换递归函数
+void fft(ComplexArray& x)
 {
-    if (n == 1) //如果需要转换的只有一项就直接返回
+    const size_t N = x.size();
+    if (N <= 1) {
         return;
-    int mid = n / 2;
-    complex<double> A1[mid + 1], A2[mid + 1];
-    for (int i = 0; i <= n; i += 2) //拆分多项式
-    {
-        A1[i / 2] = a[i];
-        A2[i / 2] = a[i + 1];
     }
-    FFT(A1, mid, inv); //递归分治
-    FFT(A2, mid, inv);
-    complex<double> w0(1, 0), wn(cos(2 * pi / n), inv * sin(2 * pi / n)); //单位根
-    for (int i = 0; i < mid; ++i, w0 *= wn)                               //合并多项式
-    {
-        a[i] = A1[i] + w0 * A2[i];
-        a[i + n / 2] = A1[i] - w0 * A2[i];
+
+    // 分离奇偶数索引
+    ComplexArray even = x[std::slice(0, N/2, 2)];
+    ComplexArray odd = x[std::slice(1, N/2, 2)];
+
+    // 递归计算奇偶数部分的FFT
+    fft(even);
+    fft(odd);
+
+    // 合并结果
+    for (size_t k = 0; k < N/2; ++k) {
+        Complex t = std::polar(1.0, -2 * M_PI * k / N) * odd[k];
+        x[k] = even[k] + t;
+        x[k + N/2] = even[k] - t;
     }
 }
+
+// 打印复数数组
+void printComplexArray(const ComplexArray& arr)
+{
+    for (const auto& val : arr) {
+        std::cout << val << " ";
+    }
+    std::cout << std::endl;
+}
+
 int main()
 {
+    // 输入要进行FFT的复数序列
+    ComplexArray x = {std::complex<double>(1.0), std::complex<double>(2.0, -1.0), std::complex<double>(0, -1.0), std::complex<double>(-1.0, 2.0)};
+    // ComplexArray x = {std::complex<double>(3.0), std::complex<double>(3.0), std::complex<double>(2.0), std::complex<double>(-2.0)};
 
-    // scanf("%d%d", &n, &m);
-    // for (int i = 0; i <= n; ++i) //输入第一个多项式
-    // {
-    //     double x;
-    //     scanf("%lf", &x);
-    //     a[i].real(x); //complex类型变量.real(x)意味着将实数部赋为x，real()返回实数部值
-    // }
-    // for (int i = 0; i <= m; ++i) //输入第二个多项式
-    // {
-    //     double x;
-    //     scanf("%lf", &x);
-    //     b[i].real(x);
-    // }
-    // int len = 1 << max((int)ceil(log2(n + m)), 1); //由于FFT需要项数为2的整数次方倍，所以多项式次数len为第一个大于n+m的二的正整数次方
-    // FFT(a, len, 1);                                //系数表达转点值表达
-    // FFT(b, len, 1);
-    // for (int i = 0; i <= len; ++i)
-    //     a[i] = a[i] * b[i];                       //O(n)乘法
-    // FFT(a, len, -1);                              //点值表达转系数表达
-    // for (int i = 0; i <= n + m; ++i)              //输出
-    //     printf("%.0f ", a[i].real() / len + eps); //记得要除n，eps为解决掉精度问题
+    std::cout << "原始序列: ";
+    printComplexArray(x);
+
+    // 进行FFT变换
+    fft(x);
+
+    std::cout << "FFT结果: ";
+    printComplexArray(x);
+
     return 0;
 }
