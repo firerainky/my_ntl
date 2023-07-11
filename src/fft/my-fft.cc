@@ -45,3 +45,55 @@ void MyFftVec(ComplexVec &coeffs, bool inv) {
         coeffs[i + half] = A1[i] - w0 * A2[i];
     }
 }
+
+void change(ComplexVec &coeffs) {
+    size_t i, j, k;
+    size_t len = coeffs.size();
+    for (int i = 1, j = len / 2; i < len - 1;) {
+        if (i < j) {    // Swap i, j
+            Complex temp = coeffs[i];
+            coeffs[i] = coeffs[j];
+            coeffs[j] = temp;
+        }
+        // i++, j 变成新的 i 对应的值, 保证 i 与 j 始终是反转的
+        ++i;
+        k = len / 2;
+        while (j >= k) {
+            j = j - k;
+            k >>= 1;
+        }
+        if (j < k) j += k;
+    }
+}
+
+void MyFftVecOptimize(ComplexVec &coeffs, bool inv) {
+    change(coeffs);
+    size_t len = coeffs.size();
+    double inversion = inv ? -1.0 : 1.0;
+
+    for (size_t h = 2; h <= len; h <<= 1) {
+        Complex wn(cos(2 * pi / h), inversion * sin(2 * pi / h));
+
+        for (size_t j = 0; j < len; j+= h) {
+            Complex w(1);
+            for (size_t k = j; k < j + h/2; ++k) {
+                Complex u = coeffs[k];
+                Complex t = w * coeffs[k + h/2];
+                coeffs[k] = u + t;
+                coeffs[k + h/2] = u - t;
+                w = w * wn;
+            }
+        }
+    }
+
+    if (inv) {
+        for (size_t i = 0; i < len; ++i) {
+            coeffs[i] /= len;
+            // TODO: Precision problem.
+            double eps = 1e-6;
+            if (abs(coeffs[i].real()) < eps) {
+                coeffs[i].real(0);
+            }
+        }
+    }
+}

@@ -37,3 +37,16 @@ TEST(FftTests, ifftVec) {
 
     EXPECT_EQ(values, expectedResult);
 }
+
+TEST(FftTests, fftVecOptimize) {
+    ComplexVec coeffs = {Complex(-1.0, 2.0), Complex(0.0, -1.0), Complex(2.0, -1.0), Complex(1.0)};
+    ComplexVec values = {Complex(2.0), Complex(-2.0, 2.0), Complex(0.0, 2.0), Complex(-4.0, 4.0)};
+
+    ComplexVec vec = coeffs;
+    MyFftVecOptimize(vec);
+    EXPECT_EQ(vec, values);
+
+    vec = values;
+    MyFftVecOptimize(vec, true);
+    EXPECT_EQ(vec, coeffs);
+}
