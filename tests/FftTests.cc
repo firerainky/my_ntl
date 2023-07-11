@@ -20,3 +20,20 @@ TEST(FftTests, fftVec) {
 
     EXPECT_EQ(coeffs, expectedResult);
 }
+
+TEST(FftTests, ifftVec) {
+    ComplexVec values = {Complex(2.0), Complex(-2.0, 2.0), Complex(0.0, 2.0), Complex(-4.0, 4.0)};
+    ComplexVec expectedResult = {Complex(-1.0, 2.0), Complex(0.0, -1.0), Complex(2.0, -1.0), Complex(1.0)};
+
+    MyFftVec(values, true);
+    const double eps = 1e-6;
+
+    for (size_t i = 0; i < values.size(); ++i) {
+        values[i] /= values.size();
+        if (abs(values[i].real()) < eps) {
+            values[i].real(0);
+        }
+    }
+
+    EXPECT_EQ(values, expectedResult);
+}
