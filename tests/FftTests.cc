@@ -79,3 +79,23 @@ TEST(NttTests, ntt) {
         EXPECT_EQ(poly1[i], expectedResult[i]) << "At index " << i << " got wrong number.";
     }
 }
+
+TEST(NttTests, nttWithMoreSpecificData) {
+    int64_t g = 132170, mod = 4194353;
+    int64_t gi = FastPower(g, mod - 2, mod);
+
+    size_t len = 4;
+    int64_t poly[len] = {4127, 9647, 1987, 5410};
+    int64_t expectedResult[len] = {885632, 1936918, 2107494, 3475170};
+    MyNtt(poly, len, g, gi, mod);
+
+    // for (size_t i = 0; i < len; ++i) {
+    //     EXPECT_EQ(poly[i], expectedResult[i]) << "At index " << i << " got wrong number.";
+    // }
+    MyNtt(poly, len, g, gi, mod, true);
+    std::cout << "duedue: ";
+    for (size_t i = 0; i < len; ++i) {
+        std::cout << poly[i] << ", ";
+    }
+    std::cout << "\n";
+}
