@@ -1,20 +1,23 @@
-#include "gtest/gtest.h"
 #include "my-ftt.h"
 #include "my-ntt.h"
+#include "gtest/gtest.h"
 #include <cmath>
 
-TEST(FftTests, fft) {
+TEST(FftTests, fft)
+{
     Complex coeffs[4] = {Complex(-1.0, 2.0), Complex(0.0, -1.0), Complex(2.0, -1.0), Complex(1.0)};
     Complex expectedResult[4] = {Complex(2.0), Complex(-2.0, 2.0), Complex(0.0, 2.0), Complex(-4.0, 4.0)};
 
     MyFft(coeffs, 4);
 
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 4; ++i)
+    {
         EXPECT_EQ(*(coeffs + i), *(expectedResult + i));
     }
 }
 
-TEST(FftTests, fftVec) {
+TEST(FftTests, fftVec)
+{
     ComplexVec coeffs = {Complex(-1.0, 2.0), Complex(0.0, -1.0), Complex(2.0, -1.0), Complex(1.0)};
     ComplexVec expectedResult = {Complex(2.0), Complex(-2.0, 2.0), Complex(0.0, 2.0), Complex(-4.0, 4.0)};
 
@@ -23,16 +26,19 @@ TEST(FftTests, fftVec) {
     EXPECT_EQ(coeffs, expectedResult);
 }
 
-TEST(FftTests, ifftVec) {
+TEST(FftTests, ifftVec)
+{
     ComplexVec values = {Complex(2.0), Complex(-2.0, 2.0), Complex(0.0, 2.0), Complex(-4.0, 4.0)};
     ComplexVec expectedResult = {Complex(-1.0, 2.0), Complex(0.0, -1.0), Complex(2.0, -1.0), Complex(1.0)};
 
     MyFftVec(values, true);
     const double eps = 1e-6;
 
-    for (size_t i = 0; i < values.size(); ++i) {
+    for (size_t i = 0; i < values.size(); ++i)
+    {
         values[i] /= values.size();
-        if (abs(values[i].real()) < eps) {
+        if (abs(values[i].real()) < eps)
+        {
             values[i].real(0);
         }
     }
@@ -40,7 +46,8 @@ TEST(FftTests, ifftVec) {
     EXPECT_EQ(values, expectedResult);
 }
 
-TEST(FftTests, fftVecOptimize) {
+TEST(FftTests, fftVecOptimize)
+{
     ComplexVec coeffs = {Complex(-1.0, 2.0), Complex(0.0, -1.0), Complex(2.0, -1.0), Complex(1.0)};
     ComplexVec values = {Complex(2.0), Complex(-2.0, 2.0), Complex(0.0, 2.0), Complex(-4.0, 4.0)};
 
@@ -53,11 +60,14 @@ TEST(FftTests, fftVecOptimize) {
     EXPECT_EQ(vec, coeffs);
 }
 
-TEST(NttTests, ntt) {
+TEST(NttTests, ntt)
+{
     int64_t g = 3, gi = 332748118, mod = 998244353;
 
     size_t m = 2, n = 3;
-    int len = 1 << std::max((int)ceil(log2(m + n)), 1);
+    // int len = 1 << std::max((int)ceil(log2(m + n)), 1);
+    // TODO: error: variable-sized object may not be initialized
+    const int len = 8;
 
     int64_t poly1[len] = {1, 2, 0, 0, 0, 0, 0, 0};
     int64_t poly2[len] = {1, 2, 1, 0, 0, 0, 0, 0};
@@ -65,7 +75,8 @@ TEST(NttTests, ntt) {
     MyNtt(poly1, len, g, gi, mod);
     MyNtt(poly2, len, g, gi, mod);
 
-    for (int i = 0; i < len; ++i) {
+    for (int i = 0; i < len; ++i)
+    {
         poly1[i] = poly1[i] * poly2[i] % mod;
     }
 
@@ -75,41 +86,42 @@ TEST(NttTests, ntt) {
     int64_t inverse = FastPower(len, mod - 2, mod);
     int64_t expectedResult[len] = {1, 4, 5, 2, 0, 0, 0, 0};
 
-    for (size_t i = 0; i < len; ++i) {
+    for (size_t i = 0; i < len; ++i)
+    {
         EXPECT_EQ(poly1[i], expectedResult[i]) << "At index " << i << " got wrong number.";
     }
 }
 
-TEST(NttTests, nttWithMoreSpecificData) {
+TEST(NttTests, nttWithMoreSpecificData)
+{
     int64_t g = 132170, mod = 4194353;
     int64_t gi = FastPower(g, mod - 2, mod);
 
-    size_t len = 8;
-    // int64_t poly[len] = {4127, 9647, 1987, 5410};
-    // int64_t expectedResult[len] = {885632, 1936918, 2107494, 3475170};
-
-    int64_t poly[len] = {431, 3414, 1234, 7845, 2145, 7415, 5471, 8452};
-    int64_t expectedResult[len] = {1877267, 1022026, 3006168, 1772286, 1331622, 1039762, 869706, 1667670};
-
+    const size_t len = 4;
+    int64_t poly[len] = {4127, 9647, 1987, 5410};
+    int64_t expectedResult[len] = {885632, 1936918, 2107494, 3475170};
     MyNtt(poly, len, g, gi, mod);
 
-    for (size_t i = 0; i < len; ++i) {
+    for (size_t i = 0; i < len; ++i)
+    {
         // EXPECT_EQ(poly[i], expectedResult[i]) << "At index " << i << " got wrong number.";
         std::cout << poly[i] << ", ";
     }
     MyNtt(poly, len, g, gi, mod, true);
     std::cout << "duedue: ";
-    for (size_t i = 0; i < len; ++i) {
+    for (size_t i = 0; i < len; ++i)
+    {
         std::cout << poly[i] << ", ";
     }
     std::cout << "\n";
 }
 
-TEST(NttTests, nttWithMoreSpecificData2) {
+TEST(NttTests, nttWithMoreSpecificData2)
+{
     int64_t g = 11, mod = 769;
     int64_t gi = FastPower(g, mod - 2, mod);
 
-    size_t len = 4;
+    const size_t len = 4;
     // int64_t poly[len] = {4127, 9647, 1987, 5410};
     // int64_t expectedResult[len] = {885632, 1936918, 2107494, 3475170};
 
@@ -118,17 +130,20 @@ TEST(NttTests, nttWithMoreSpecificData2) {
 
     MyNtt(poly, len, g, gi, mod);
 
-    for (size_t i = 0; i < len; ++i) {
+    for (size_t i = 0; i < len; ++i)
+    {
         EXPECT_EQ(poly[i], expectedResult[i]) << "At index " << i << " got wrong number.";
         // std::cout << poly[i] << ", ";
     }
     std::cout << "kaka: ";
-    for (size_t i = 0; i < len; ++i) {
+    for (size_t i = 0; i < len; ++i)
+    {
         std::cout << poly[i] << ", ";
     }
     MyNtt(poly, len, g, gi, mod, true);
     std::cout << "duedue: ";
-    for (size_t i = 0; i < len; ++i) {
+    for (size_t i = 0; i < len; ++i)
+    {
         std::cout << poly[i] << ", ";
     }
     std::cout << "\n";
