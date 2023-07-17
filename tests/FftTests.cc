@@ -84,14 +84,19 @@ TEST(NttTests, nttWithMoreSpecificData) {
     int64_t g = 132170, mod = 4194353;
     int64_t gi = FastPower(g, mod - 2, mod);
 
-    size_t len = 4;
-    int64_t poly[len] = {4127, 9647, 1987, 5410};
-    int64_t expectedResult[len] = {885632, 1936918, 2107494, 3475170};
+    size_t len = 8;
+    // int64_t poly[len] = {4127, 9647, 1987, 5410};
+    // int64_t expectedResult[len] = {885632, 1936918, 2107494, 3475170};
+
+    int64_t poly[len] = {431, 3414, 1234, 7845, 2145, 7415, 5471, 8452};
+    int64_t expectedResult[len] = {1877267, 1022026, 3006168, 1772286, 1331622, 1039762, 869706, 1667670};
+
     MyNtt(poly, len, g, gi, mod);
 
-    // for (size_t i = 0; i < len; ++i) {
-    //     EXPECT_EQ(poly[i], expectedResult[i]) << "At index " << i << " got wrong number.";
-    // }
+    for (size_t i = 0; i < len; ++i) {
+        // EXPECT_EQ(poly[i], expectedResult[i]) << "At index " << i << " got wrong number.";
+        std::cout << poly[i] << ", ";
+    }
     MyNtt(poly, len, g, gi, mod, true);
     std::cout << "duedue: ";
     for (size_t i = 0; i < len; ++i) {
@@ -99,3 +104,61 @@ TEST(NttTests, nttWithMoreSpecificData) {
     }
     std::cout << "\n";
 }
+
+TEST(NttTests, nttWithMoreSpecificData2) {
+    int64_t g = 11, mod = 769;
+    int64_t gi = FastPower(g, mod - 2, mod);
+
+    size_t len = 4;
+    // int64_t poly[len] = {4127, 9647, 1987, 5410};
+    // int64_t expectedResult[len] = {885632, 1936918, 2107494, 3475170};
+
+    int64_t poly[len] = {15, 21, 13, 44};
+    int64_t expectedResult[len] = {93, 114, 732, 659};
+
+    MyNtt(poly, len, g, gi, mod);
+
+    for (size_t i = 0; i < len; ++i) {
+        EXPECT_EQ(poly[i], expectedResult[i]) << "At index " << i << " got wrong number.";
+        // std::cout << poly[i] << ", ";
+    }
+    std::cout << "kaka: ";
+    for (size_t i = 0; i < len; ++i) {
+        std::cout << poly[i] << ", ";
+    }
+    MyNtt(poly, len, g, gi, mod, true);
+    std::cout << "duedue: ";
+    for (size_t i = 0; i < len; ++i) {
+        std::cout << poly[i] << ", ";
+    }
+    std::cout << "\n";
+}
+
+// TEST(NttTests, nttWithMoreSpecificData3) {
+//     int64_t g = 11, mod = 769;
+//     int64_t gi = FastPower(g, mod - 2, mod);
+
+//     size_t len = 4;
+//     // int64_t poly[len] = {4127, 9647, 1987, 5410};
+//     // int64_t expectedResult[len] = {885632, 1936918, 2107494, 3475170};
+
+//     int64_t poly[len] = {1, 2, 3, 4};
+//     int64_t expectedResult[len] = {93, 114, 732, 659};
+
+//     MyNtt(poly, len, g, gi, mod);
+
+//     for (size_t i = 0; i < len; ++i) {
+//         EXPECT_EQ(poly[i], expectedResult[i]) << "At index " << i << " got wrong number.";
+//         // std::cout << poly[i] << ", ";
+//     }
+//     std::cout << "kaka: ";
+//     for (size_t i = 0; i < len; ++i) {
+//         std::cout << poly[i] << ", ";
+//     }
+//     MyNtt(poly, len, g, gi, mod, true);
+//     std::cout << "duedue: ";
+//     for (size_t i = 0; i < len; ++i) {
+//         std::cout << poly[i] << ", ";
+//     }
+//     std::cout << "\n";
+// }

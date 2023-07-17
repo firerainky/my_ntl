@@ -4,6 +4,7 @@ set(TEST_SOURCES
   AddWithCarryTests.cc
   CeilIntTests.cc
   FftTests.cc
+  CyclotomicPolyTests.cc
 )
 set(TEST_INCLUDES ./)
 

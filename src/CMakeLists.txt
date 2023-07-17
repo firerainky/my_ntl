@@ -1,4 +1,4 @@
-set(LIBRARY_SOURCES UBigInt.cc fft/my-fft.cc fft/my-ntt.cc)
+set(LIBRARY_SOURCES UBigInt.cc fft/my-fft.cc fft/my-ntt.cc fft/cyclotomic-poly.cc)
 set(LIBRARY_INCLUDES "./" "fft/")
 
 add_library(${LIBRARY_NAME} STATIC ${LIBRARY_SOURCES})
