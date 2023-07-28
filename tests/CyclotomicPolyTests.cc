@@ -13,12 +13,16 @@ TEST(CyclotomicPolyTests, MyOwnNttRecursiveImpl) {
     EXPECT_EQ(vec, expectedVec);
 }
 
-TEST(CyclotomicPolyTests, MyOwnNttRecursiveImpl2) {
+TEST(CyclotomicPolyTests, NttAndINttRecursive) {
     UInt g = 11, mod = 769;
-    UInt gi = 1;
-    UIntVec vec = {15, 21, 13, 44};
-    UIntVec expectedVec = {93, 114, 732, 659};
+    UInt gi = 70;
+    UIntVec coeffVec = {15, 21, 13, 44};
+    UIntVec evalVec = {93, 114, 732, 659};
+    UIntVec vec(coeffVec);
 
     RecursiveNtt(vec, g, mod);
-    EXPECT_EQ(vec, expectedVec);
+    EXPECT_EQ(vec, evalVec);
+
+    InverseNtt(vec, gi, mod);
+    EXPECT_EQ(vec, coeffVec);
 }
