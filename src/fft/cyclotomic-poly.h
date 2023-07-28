@@ -6,5 +6,8 @@
 using UInt = uint64_t;
 using UIntVec = std::vector<UInt>;
 
-void RecursiveNtt(UIntVec &vec, UInt g, UInt mod);
-void InverseNtt(UIntVec &vec, UInt gi, UInt mod);
+void Ntt(UIntVec &vec, UInt g, UInt mod);
+void InvNtt(UIntVec &vec, UInt gi, UInt mod);
+
+void NttOverARing(UIntVec &vec, UInt g, UInt mod);
+void InvNttOverARing(UIntVec &vec, UInt gi, UInt mod);
