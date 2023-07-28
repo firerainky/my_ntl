@@ -14,23 +14,6 @@ UInt FastPowerMod(UInt n, UInt power, UInt mod) {
     return res;
 }
 
-std::vector<int> CyclotomicPoly(int n) {
-    if (n == 0) {
-        return {1};
-    } else if (n == 1) {
-        return {1, -1};
-    } else {
-        std::vector<int> prevPoly = CyclotomicPoly(n - 1);
-        std::vector<int> currPoly(prevPoly.size() + 1, 0);
-        currPoly[0] = -prevPoly.back();
-        for (int i = 1; i < prevPoly.size(); ++i) {
-            currPoly[i] = prevPoly[i - 1] - prevPoly.back() * prevPoly[prevPoly.size() - i];
-        }
-        currPoly.back() = prevPoly.back();
-        return currPoly;
-    }
-}
-
 void RecursiveNtt(UIntVec &vec, UInt g, UInt mod) {
     size_t n = vec.size();
     if (n <= 1) return;
